@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+.npm
+.npmrc
+
+# Playwright (report, results, storage)
+test-results/
+playwright-report/
+*.playwright-report/
+tests-results/  # Como en tu screenshot
+playwright/.auth/
+playwright/playwright-report/
+*.tsbuildinfo
+
+# Logs and temp
+*.log
+tmp/
+temp/
+.DS_Store
+.env
+.env.local
+.env.*.local
+
+# IDE y OS
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Builds
+dist/
+build/
