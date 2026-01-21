@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { addAbortListener } from 'node:events';
 
 const secciones = [
   { nombre: 'Cursos', url: '/cursos', tituloEsperado: 'Cursos' },
@@ -175,6 +174,19 @@ test.describe('Navegación en www.freerangetesters.com', () => {
 
       await expect(page.getByText('¿Viste? ¡Apareció un Pop-up!')).toHaveText('¿Viste? ¡Apareció un Pop-up!');
       await page.getByRole('button', { name: 'Cerrar' }).click();
+    });
+
+  })
+
+  test('Validando un radio button', async ({ page }) => {
+    await test.step('Estando yo en la web principal', async () => {
+      await page.goto('https://thefreerangetester.github.io/sandbox-automation-testing/');
+      await expect(page).toHaveTitle('Automation Sandbox');
+    });
+
+    await test.step('Validando un radio button', async () => {
+      await page.getByRole('radio', { name: 'Si' }).check();
+      await page.getByRole('radio', { name: 'No' }).check();
     });
 
   })
