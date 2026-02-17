@@ -26,8 +26,9 @@ test.describe('Redeem points on private trackers', () => {
         throw new Error('The credentials are not configured in the file .env');
       }
 
-      await privateTracker.usernameTextBox.fill(username);
-      await privateTracker.passwordTextBox.fill(password);
+      await privateTracker.fillSensitive(privateTracker.usernameTextBox, username);
+      await privateTracker.fillSensitive(privateTracker.passwordTextBox, password);
+
       await privateTracker.clickLoginV1();
     });
 
@@ -77,8 +78,9 @@ test.describe('Redeem points on private trackers', () => {
         throw new Error('The credentials are not configured in the file .env');
       }
 
-      await privateTracker.usernameTextBox.fill(username);
-      await privateTracker.passwordTextBox.fill(password);
+      await privateTracker.fillSensitive(privateTracker.usernameTextBox, username);
+      await privateTracker.fillSensitive(privateTracker.passwordTextBox, password);
+
       await privateTracker.clickLoginV1();
     });
 
@@ -125,8 +127,9 @@ test.describe('Redeem points on private trackers', () => {
         throw new Error('The credentials are not configured in the file .env');
       }
 
-      await privateTracker.emailTextBox.fill(username);
-      await privateTracker.passwordTextBox2.fill(password);
+      await privateTracker.fillSensitive(privateTracker.emailTextBox, username);
+      await privateTracker.fillSensitive(privateTracker.passwordTextBox2, password);
+
       await privateTracker.loginButton2.click();
     });
 

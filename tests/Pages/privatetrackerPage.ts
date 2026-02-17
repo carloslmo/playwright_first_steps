@@ -20,9 +20,9 @@ export class privateTrackerPage {
     constructor(page: Page) {
         this.page = page;
         this.usernameTextBox = page.getByRole('textbox', { name: 'Usuario' });
-        this.emailTextBox = page.getByText('Email');
+        this.emailTextBox = page.getByLabel('Email');
         this.passwordTextBox = page.getByRole('textbox', { name: 'Contraseña' });
-        this.passwordTextBox2 = page.getByText('Password', { exact: true });
+        this.passwordTextBox2 = page.getByLabel('Password', { exact: true });
         this.loginButton = page.getByRole('button', { name: 'Iniciar sesión' });
         this.loginButton2 = page.getByRole('button', { name: 'Login' });
         this.bonusButton = page.locator('xpath=//span[@class="badge-user text-bold"][.//a[contains(@href, "bonus")]]');
@@ -79,5 +79,18 @@ export class privateTrackerPage {
 
         await this.redeemYTLink.click();
         console.log('✅ Purchase completed without errors');
+    }
+
+    async fillSensitive(locator: Locator, value: string) {
+        await locator.evaluate((el, val) => {
+          const input = el as HTMLInputElement;
+          const nativeInputSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype,
+            'value'
+          )?.set;
+          nativeInputSetter?.call(input, val);
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }, value);
     }
 }
