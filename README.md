@@ -16,8 +16,8 @@ Este proyecto utiliza **Playwright** para la automatización de pruebas end‑to
 ### 🧩 Requisitos mínimos
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
-- **Node.js** ≥ 18.x (recomendado LTS)
-- **npm** ≥ 9.x (o **yarn / pnpm** si lo prefieres)
+- **Node.js** ≥ 18.x (recomendado LTS) - Guia: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- **npm** ≥ 9.x (o **yarn / pnpm** si lo prefieres) https://github.com/nvm-sh/nvm
 - **Git**
 - Sistema operativo compatible:
   - macOS
@@ -25,6 +25,7 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
   - Windows 10 / 11
 
 > 💡 Playwright descarga automáticamente los navegadores necesarios (Chromium, Firefox y WebKit).
+Docs: https://playwright.dev/docs/intro
 
 ---
 
@@ -100,8 +101,8 @@ This project uses **Playwright** for end‑to‑end test automation. This README
 ### 🧩 Minimum requirements
 Make sure you have the following installed:
 
-- **Node.js** ≥ 18.x (LTS recommended)
-- **npm** ≥ 9.x (or **yarn / pnpm**)
+- **Node.js** ≥ 18.x (LTS recommended) Guide: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- **npm** ≥ 9.x (or **yarn / pnpm**) https://github.com/nvm-sh/nvm
 - **Git**
 - Supported OS:
   - macOS
@@ -109,6 +110,7 @@ Make sure you have the following installed:
   - Windows 10 / 11
 
 > 💡 Playwright automatically downloads required browsers (Chromium, Firefox, WebKit).
+Docs: https://playwright.dev/docs/intro
 
 ---
 
