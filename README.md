@@ -81,6 +81,31 @@ Ver el último reporte:
 npx playwright show-report
 ```
 
+# 🛠️ APIs con Fastify
+
+Esta API permite ejecutar scripts de **Playwright**, generar reportes y verificar el estado del servidor.  
+
+---
+
+## Endpoints
+
+| Método | Ruta | Descripción |
+|--------|------|--------------------------|
+| GET    | /status       | Comprueba que la API está funcionando. |
+| GET    | /report       | Muestra el reporte en formato HTML. |
+| DELETE | /report       | Borra el reporte generado.|
+| POST   | /run-script   | Ejecuta un script de Playwright. |
+|        | Body: `{ "script": "privateTracker" }` | Especifica el nombre del script a ejecutar.  |
+
+---
+
+## Cómo levantar la API / How to start the API
+
+1. Asegúrate de modificar la última línea de `server.js` para apuntar correctamente a la URL de tu máquina.
+2. Ejecuta el siguiente comando:  
+   ```bash
+   node server.js
+
 ---
 
 ### 🛠️ Configuración adicional (opcional)
@@ -165,6 +190,31 @@ Open last report:
 ```bash
 npx playwright show-report
 ```
+
+# 🛠️ Fastify APIs
+
+This API allows you to run **Playwright** scripts, generate reports, and check server status.
+
+---
+
+## Endpoints
+
+| Método | Ruta |  Description |
+|--------|------|--------------------------|
+| GET    | /status       | Checks if the API is running. |
+| GET    | /report       | Shows the report in HTML format. |
+| DELETE | /report       | Deletes the generated report. |
+| POST   | /run-script   | Runs a Playwright script. |
+|        | Body: `{ "script": "privateTracker" }` | Specifies the script name to run. |
+
+---
+
+## How to start the API
+
+1. Make sure to modify the last line of `server.js` to correctly point to your machine's URL.
+2. Run the following command:
+   ```bash
+   node server.js
 
 ---
 
