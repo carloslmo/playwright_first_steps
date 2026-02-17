@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:demo": "npx playwright test ./tests/example.spec.ts --project=chromium",
-    "test:privateTracker": "npx playwright test ./tests/privatetracker.spec.ts --project=chromium"
+    "test:demo": "npx playwright test ./tests/example.spec.ts --project=chromium --workers=1",
+    "test:privateTracker": "npx playwright test ./tests/privatetracker.spec.ts --project=chromium --workers=1"
   },
   "keywords": [],
   "author": "Carlos López",
