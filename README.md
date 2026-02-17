@@ -99,7 +99,7 @@ Esta API permite ejecutar scripts de **Playwright**, generar reportes y verifica
 
 ---
 
-## Cómo levantar la API / How to start the API
+## Cómo levantar la API
 
 1. Asegúrate de modificar la última línea de `server.js` para apuntar correctamente a la URL de tu máquina.
 2. Ejecuta el siguiente comando:  
