@@ -5,7 +5,9 @@ import dotenv from "dotenv"
 test.describe('Redeem points on private trackers', () => {
   dotenv.config();
 
-  test('Redeem points at HDOlimpo', async ({ page }) => {
+  test('Redeem points at HDOlimpo', {
+    tag: ['@week', '@hdolimpo']
+  }, async ({ page }) => {
     const privateTracker = new privateTrackerPage(page);
 
     test.info().annotations.push({
@@ -37,9 +39,9 @@ test.describe('Redeem points on private trackers', () => {
 
       await privateTracker.checkPointsV1();
       const pointsNum = await privateTracker.checkPointsV1();
-
-      if (pointsNum >= 15000) {
-        expect(pointsNum).toBeGreaterThan(15000);
+      let msg;
+      if (pointsNum >= 25000) {
+        expect(pointsNum).toBeGreaterThan(25000);
         await page.goto(process.env.URL_HDOLIMPO_STORE!);
 
         // Check price
@@ -47,17 +49,26 @@ test.describe('Redeem points on private trackers', () => {
 
         // Wait for a modal to appear (success or failure)
         await page.waitForSelector('.swal2-popup', { timeout: 10000 });
-        
+
         // Verify that the error message does NOT appear
         await expect(page.getByRole('dialog', { name: 'Error' }), 'Purchase not completed').not.toBeVisible();
-        console.log('✅ Purchase completed without errors');
+        msg = '✅ Purchase completed without errors';
+        console.log(msg);
       } else if (pointsNum < 25000) {
-        console.log(`Puntos actuales: ${pointsNum}`);
+        msg = `Puntos actuales: ${pointsNum}, insuficientes para comprar.`;
+        console.log(msg);
       }
+
+      test.info().attach('Finish result', {
+        body: msg,
+        contentType: 'text/plain'
+      });
     })
   });
 
-  test('Redeem points at TORRENTLAND', async ({ page }) => {
+  test('Redeem points at TORRENTLAND', {
+    tag: ['@week', '@torrentland']
+  }, async ({ page }) => {
     const privateTracker = new privateTrackerPage(page);
 
     test.info().annotations.push({
@@ -90,23 +101,35 @@ test.describe('Redeem points on private trackers', () => {
       await page.goto(process.env.URL_TORRENTLAND_STORE!);
       await expect(page).toHaveTitle('Torrentland - Torrent Tracker');
 
-      await privateTracker.buy500GB(); 
+      await privateTracker.buy500GB();
 
       const successAlert = page.getByRole('alert', { name: 'Intercambio de BON realizado' });
-      const errorAlert   = page.getByLabel('Error').getByText('Not enough BON.');
+      const errorAlert = page.getByLabel('Error').getByText('Not enough BON.');
 
+      let msg;
+      // Wait 10 seconds before checking alerts
+      await page.waitForTimeout(10000);
+      
       if (await successAlert.isVisible()) {
         await expect(successAlert, 'Purchase should be completed').toBeVisible();
-        console.log('✅ Purchase completed without errors');
+        msg = '✅ Purchase completed without errors';
+        console.log(msg);
       } else {
         await expect(errorAlert, 'Purchase should NOT be completed').toBeVisible();
-        console.log('Purchase not completed, you are likely missing points');
+        msg = 'Purchase not completed, you are likely missing points';
+        console.log(msg);
       }
 
+      test.info().attach('Finish result', {
+        body: msg,
+        contentType: 'text/plain'
+      });
     })
   });
 
-  test('Redeem points at YTMonster', async ({ page }) => {
+  test('Redeem points at YTMonster', {
+    tag: ['@daily', '@ytmonster']
+  }, async ({ page }) => {
     const privateTracker = new privateTrackerPage(page);
 
     test.info().annotations.push({
@@ -137,7 +160,12 @@ test.describe('Redeem points on private trackers', () => {
       await expect(page).toHaveTitle('YTMonster® | Dashboard');
 
       await privateTracker.earnCreditsLink.click();
-      await privateTracker.redeemYT(); 
+      let msg = await privateTracker.redeemYT();
+
+      test.info().attach('Resultado final', {
+        body: msg,
+        contentType: 'text/plain'
+      });
     })
   });
 

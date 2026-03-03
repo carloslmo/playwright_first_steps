@@ -47,8 +47,6 @@ export class privateTrackerPage {
         const textComplete = await this.bonusButton.textContent();
         const numStr = textComplete?.trim().match(/(\d+)/)?.[1];
         const numPoints = Number(numStr);
-
-        console.log(`Current points: ${numPoints}`);
         return numPoints;
     }
 
@@ -72,13 +70,14 @@ export class privateTrackerPage {
     }
 
     async redeemYT() {
-        await expect(
-            this.redeemYTLink,
-            'The YouTube redemption link is NOT visible'
-        ).toBeVisible();
-
-        await this.redeemYTLink.click();
-        console.log('✅ Purchase completed without errors');
+        let msg;
+        if (await this.redeemYTLink.isVisible()) {
+            await this.redeemYTLink.click();
+            msg = '✅ Purchase completed without errors';
+        } else {
+            msg = '❌ Have we already redeemed the points or havent reached them yet'
+        }
+        return msg;
     }
 
     async fillSensitive(locator: Locator, value: string) {
