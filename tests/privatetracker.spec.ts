@@ -169,4 +169,47 @@ test.describe('Redeem points on private trackers', () => {
     })
   });
 
+  test('Redeem points at TorrentLeech', {
+    tag: ['@week', '@torrentleech']
+  }, async ({ page }) => {
+    const privateTracker = new privateTrackerPage(page);
+
+    test.info().annotations.push({
+      type: 'User story 004',
+      description: 'We entered Torrentleech, checked that we had more than 12,000 points and redeemed them in the store for an extra 100gb to our bag.'
+    });
+
+    await test.step('Since I am sailing towards TORRENTLEECH', async () => {
+      await page.goto(process.env.BASE_URL_TORRENTLEECH!);
+      await expect(page).toHaveTitle('Login :: TorrentLeech.org');
+    });
+
+    await test.step('Login', async () => {
+      const username = process.env.TORRENTLEECH_USERNAME;
+      const password = process.env.TORRENTLEECH_PASSWORD;
+
+      if (!username || !password) {
+        throw new Error('The credentials are not configured in the file .env');
+      }
+
+      await privateTracker.fillSensitive(privateTracker.username2, username);
+      await privateTracker.fillSensitive(privateTracker.passwordTextBox3, password);
+
+      await privateTracker.clickLoginV3();
+    });
+
+    await test.step('Since we checked the points', async () => {
+      await expect(page).toHaveTitle('TorrentLeech.org');
+
+      await page.goto(process.env.URL_TORRENTLEECH_STORE!);
+      await expect(page).toHaveTitle('TorrentLeech.org');
+
+      let msg = await privateTracker.buy250GB();
+
+      test.info().attach('Finish result', {
+        body: msg,
+        contentType: 'text/plain'
+      });
+    })
+  });
 });
