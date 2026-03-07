@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:demo": "npx playwright test ./tests/example.spec.ts --project=chromium --workers=1",
-    "test:privateTracker": "npx playwright test ./tests/privatetracker.spec.ts --project=chromium --workers=1",
-    "test:privateTracker_daily": "npx playwright test ./tests/privatetracker.spec.ts --project=chromium --workers=1 --grep @daily",
-    "test:privateTracker_week": "npx playwright test ./tests/privatetracker.spec.ts --project=chromium --workers=1 --grep @week"
+    "test:daily": "npx playwright test --project=chromium --workers=1 --grep @daily",
+    "test:week": "npx playwright test --project=chromium --workers=1 --grep @week"
   },
   "keywords": [],
   "author": "Carlos López",
