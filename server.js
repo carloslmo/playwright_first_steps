@@ -5,12 +5,22 @@ import { spawn } from "child_process";
 
 const fastify = Fastify({ logger: true });
 
-// Ruta absoluta al archivo
+// Absolute path of the report
 const reportPath = path.join(process.cwd(), "playwright-report", "index.html");
 
-// Lista blanca de scripts permitidos
+// Whitelist of allowed scripts (We use this in Windows when we can't find the npx)
 const scripts = {
+  privateTracker_daily: [
+    "cmd",
+    ["/c", "npx", "playwright", "test", "./tests/privatetracker.spec.ts", "--project=chromium", "--workers=1", "--grep", "@daily"]
+  ] // npx playwright test ./tests/privatetracker.spec.ts --project=chromium --workers=1 --grep @daily
+};
+
+// Whitelist of allowed scripts (We use this when it's a Linux or Mac machine)
+const scriptsV2 = {
   privateTracker: ["npm", ["run", "test:privateTracker"]],
+  privateTracker_daily: ["npm", ["run", "test:privateTracker_daily"]],
+  privateTracker_week: ["npm", ["run", "test:privateTracker_week"]],
   demo: ["npm", ["run", "test:demo"]], //npm run test:demo
 };
 
@@ -81,4 +91,4 @@ fastify.delete("/report", async (request, reply) => {
 });
 
 
-fastify.listen({ port: 3122, host: "0.0.0.0" }); //El host se debe cambiar por el que tenga la maquina que ejecutamos
+fastify.listen({ port: 3122, host: "0.0.0.0" }); //The host must be changed to the one that the machine we are running on has.
