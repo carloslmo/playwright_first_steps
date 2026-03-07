@@ -5,7 +5,9 @@ import dotenv from "dotenv"
 test.describe('Redeem points on private trackers', () => {
   dotenv.config();
 
-  test('Redeem points at HDOlimpo', async ({ page }) => {
+  test('Redeem points at HDOlimpo', {
+    tag: ['@week', '@hdolimpo']
+  }, async ({ page }) => {
     const privateTracker = new privateTrackerPage(page);
 
     test.info().annotations.push({
@@ -26,38 +28,44 @@ test.describe('Redeem points on private trackers', () => {
         throw new Error('The credentials are not configured in the file .env');
       }
 
-      await privateTracker.fillSensitive(privateTracker.usernameTextBox, username);
-      await privateTracker.fillSensitive(privateTracker.passwordTextBox, password);
+      await privateTracker.fillSensitive(privateTracker.usernameSpanishTextBox, username);
+      await privateTracker.fillSensitive(privateTracker.passwordSpanishTextBox, password);
 
-      await privateTracker.clickLoginV1();
+      await privateTracker.clickLoginSpanish();
     });
 
     await test.step('Since we checked the points', async () => {
       await expect(page).toHaveTitle('HD-Olimpo - Nueva generación');
 
-      await privateTracker.checkPointsV1();
-      const pointsNum = await privateTracker.checkPointsV1();
+        await privateTracker.checkPointsFromBadge();
+        const pointsNum = await privateTracker.checkPointsFromBadge();
+        let msg;
+        if (pointsNum >= 25000) {
+          expect(pointsNum).toBeGreaterThan(25000);
+          await page.goto(process.env.URL_HDOLIMPO_STORE!);
 
-      if (pointsNum >= 15000) {
-        expect(pointsNum).toBeGreaterThan(15000);
-        await page.goto(process.env.URL_HDOLIMPO_STORE!);
+          // Check price
+          await privateTracker.exchange1024GiB();
 
-        // Check price
-        await privateTracker.buy1TB();
-
-        // Wait for a modal to appear (success or failure)
-        await page.waitForSelector('.swal2-popup', { timeout: 10000 });
-        
-        // Verify that the error message does NOT appear
-        await expect(page.getByRole('dialog', { name: 'Error' }), 'Purchase not completed').not.toBeVisible();
-        console.log('✅ Purchase completed without errors');
-      } else if (pointsNum < 25000) {
-        console.log(`Puntos actuales: ${pointsNum}`);
+          // Verify that the error message does NOT appear
+          await expect(page.getByRole('dialog', { name: 'Error' }), 'Purchase not completed').not.toBeVisible();
+          msg = '✅ Purchase completed without errors';
+          console.log(msg);
+        } else if (pointsNum < 25000) {
+        msg = `Puntos actuales: ${pointsNum}, insuficientes para comprar.`;
+        console.log(msg);
       }
+
+      test.info().attach('Finish result', {
+        body: msg,
+        contentType: 'text/plain'
+      });
     })
   });
 
-  test('Redeem points at TORRENTLAND', async ({ page }) => {
+  test('Redeem points at TORRENTLAND', {
+    tag: ['@week', '@torrentland']
+  }, async ({ page }) => {
     const privateTracker = new privateTrackerPage(page);
 
     test.info().annotations.push({
@@ -78,10 +86,10 @@ test.describe('Redeem points on private trackers', () => {
         throw new Error('The credentials are not configured in the file .env');
       }
 
-      await privateTracker.fillSensitive(privateTracker.usernameTextBox, username);
-      await privateTracker.fillSensitive(privateTracker.passwordTextBox, password);
+      await privateTracker.fillSensitive(privateTracker.usernameSpanishTextBox, username);
+      await privateTracker.fillSensitive(privateTracker.passwordSpanishTextBox, password);
 
-      await privateTracker.clickLoginV1();
+      await privateTracker.clickLoginSpanish();
     });
 
     await test.step('Since we checked the points', async () => {
@@ -90,23 +98,35 @@ test.describe('Redeem points on private trackers', () => {
       await page.goto(process.env.URL_TORRENTLAND_STORE!);
       await expect(page).toHaveTitle('Torrentland - Torrent Tracker');
 
-      await privateTracker.buy500GB(); 
+await privateTracker.exchange500GiB();
 
       const successAlert = page.getByRole('alert', { name: 'Intercambio de BON realizado' });
-      const errorAlert   = page.getByLabel('Error').getByText('Not enough BON.');
+      const errorAlert = page.getByLabel('Error').getByText('Not enough BON.');
 
+      let msg;
+      // Wait 10 seconds before checking alerts
+      await page.waitForTimeout(10000);
+      
       if (await successAlert.isVisible()) {
         await expect(successAlert, 'Purchase should be completed').toBeVisible();
-        console.log('✅ Purchase completed without errors');
+        msg = '✅ Purchase completed without errors';
+        console.log(msg);
       } else {
         await expect(errorAlert, 'Purchase should NOT be completed').toBeVisible();
-        console.log('Purchase not completed, you are likely missing points');
+        msg = 'Purchase not completed, you are likely missing points';
+        console.log(msg);
       }
 
+      test.info().attach('Finish result', {
+        body: msg,
+        contentType: 'text/plain'
+      });
     })
   });
 
-  test('Redeem points at YTMonster', async ({ page }) => {
+  test('Redeem points at YTMonster', {
+    tag: ['@daily', '@ytmonster']
+  }, async ({ page }) => {
     const privateTracker = new privateTrackerPage(page);
 
     test.info().annotations.push({
@@ -127,18 +147,66 @@ test.describe('Redeem points on private trackers', () => {
         throw new Error('The credentials are not configured in the file .env');
       }
 
-      await privateTracker.fillSensitive(privateTracker.emailTextBox, username);
-      await privateTracker.fillSensitive(privateTracker.passwordTextBox2, password);
+      await privateTracker.fillSensitive(privateTracker.emailTextField, username);
+      await privateTracker.fillSensitive(privateTracker.passwordEnglishTextBox, password);
 
-      await privateTracker.loginButton2.click();
+      await privateTracker.loginEnglishButton.click();
     });
 
     await test.step('Since we checked the points', async () => {
       await expect(page).toHaveTitle('YTMonster® | Dashboard');
 
       await privateTracker.earnCreditsLink.click();
-      await privateTracker.redeemYT(); 
+      let msg = await privateTracker.redeemPoints();
+
+      test.info().attach('Resultado final', {
+        body: msg,
+        contentType: 'text/plain'
+      });
     })
   });
 
+  test('Redeem points at TorrentLeech', {
+    tag: ['@week', '@torrentleech']
+  }, async ({ page }) => {
+    const privateTracker = new privateTrackerPage(page);
+
+    test.info().annotations.push({
+      type: 'User story 004',
+      description: 'We entered Torrentleech, checked that we had more than 12,000 points and redeemed them in the store for an extra 100gb to our bag.'
+    });
+
+    await test.step('Since I am sailing towards TORRENTLEECH', async () => {
+      await page.goto(process.env.BASE_URL_TORRENTLEECH!);
+      await expect(page).toHaveTitle('Login :: TorrentLeech.org');
+    });
+
+    await test.step('Login', async () => {
+      const username = process.env.TORRENTLEECH_USERNAME;
+      const password = process.env.TORRENTLEECH_PASSWORD;
+
+      if (!username || !password) {
+        throw new Error('The credentials are not configured in the file .env');
+      }
+
+      await privateTracker.fillSensitive(privateTracker.usernameEnglishTextBox, username);
+      await privateTracker.fillSensitive(privateTracker.passwordEnglishAltTextBox, password);
+
+      await privateTracker.clickLoginEnglishAlt();
+    });
+
+    await test.step('Since we checked the points', async () => {
+      await expect(page).toHaveTitle('TorrentLeech.org');
+
+      await page.goto(process.env.URL_TORRENTLEECH_STORE!);
+      await expect(page).toHaveTitle('TorrentLeech.org');
+
+      let msg = await privateTracker.exchange250GiB();
+
+      test.info().attach('Finish result', {
+        body: msg,
+        contentType: 'text/plain'
+      });
+    })
+  });
 });
