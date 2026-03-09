@@ -21,6 +21,8 @@ export class privateTrackerPage {
     readonly exchangePointsButton: Locator;
     readonly earnCreditsLink: Locator;
     readonly redeemPointsLink: Locator;
+    readonly successAlert: Locator;
+    readonly errorAlert: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -42,6 +44,8 @@ export class privateTrackerPage {
         this.exchangePointsButton = page.getByRole('button', { name: 'Exchange', exact: true });
         this.earnCreditsLink = page.getByRole('link', { name: 'Earn Credits', exact: true });
         this.redeemPointsLink = page.getByRole('link', { name: 'Redeem' });
+        this.successAlert = page.getByRole('alert', { name: 'Intercambio de BON realizado' });
+        this.errorAlert = page.getByLabel('Error').getByText('Not enough BON.');
     }
 
     async clickLoginSpanish() {

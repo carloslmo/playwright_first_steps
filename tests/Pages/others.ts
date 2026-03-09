@@ -28,10 +28,10 @@ export class othersPage {
 
     async levelUp() {;
         let msg='';
-        const todosLosBotones = await this.levelUpBtn.all();
-        const primeros4 = todosLosBotones.slice(0, 4);
+        const allthebuttom = await this.levelUpBtn.all();
+        const firsts4 = allthebuttom.slice(0, 4);
 
-        for (const [index, button] of primeros4.entries()) {
+        for (const [index, button] of firsts4.entries()) {
             await button.click();
             msg += `Temperatura = ${index + 1}\n`;
             console.log(msg);

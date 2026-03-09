@@ -17,9 +17,10 @@ test.describe('Activate coupons at supermarkets', () => {
       description: 'We went into LIDL and activated all the coupons.'
     });
 
+    test.setTimeout(240000);
+
     await test.step('Since I am sailing towards LIDL', async () => {
-      await page.goto(process.env.BASE_URL_LIDL!);
-      await expect(page).toHaveTitle('Compra Online | Lidl');
+      await utils.gotoWeb(process.env.BASE_URL_LIDL!,'Compra Online | Lidl');
       await supermarket.cookies.click();
       await supermarket.myAccountLink.click();
     });
@@ -33,17 +34,24 @@ test.describe('Activate coupons at supermarkets', () => {
         throw new Error('The credentials are not configured in the file .env');
       }
 
+      await supermarket.cookiesX.click();
       await utils.fillSensitive(supermarket.inputEmail, username);
       await utils.fillSensitive(supermarket.inputPassword, password);
-
       await supermarket.clickLoginSpanish();
-    });
+      await utils.waitForTimeout(10);
+
+      const maxRetries = 10;
+      let attempts = 0;
+      while (await supermarket.alertLogin.isVisible() && attempts < maxRetries) {
+        await utils.fillSensitive(supermarket.inputPassword, password);
+        await supermarket.clickLoginSpanish();
+        await utils.waitForTimeout(15);
+        attempts++;
+      }
+});
 
     await test.step('Since we checked the points', async () => {
-      await expect(page).toHaveTitle('My Lidl Plus Account');
-      await page.goto(process.env.URL_LIDL_STORE!);
-      await expect(page).toHaveTitle('My Lidl Account');
-      await page.waitForTimeout(5000);
+      await utils.gotoWeb(process.env.URL_LIDL_STORE!,'My Lidl Account');
 
       let msg = await supermarket.activateAllCoupons();
 

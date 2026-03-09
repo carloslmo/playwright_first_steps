@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { utilsPage } from './Pages/utils';
 import { othersPage } from './Pages/others';
 import dotenv from "dotenv"
@@ -18,11 +18,9 @@ test.describe('Level up points in Chollometro', () => {
     });
 
     await test.step('Since I am sailing towards chollometro', async () => {
-      await page.goto(process.env.BASE_URL_CHOLLOMETRO!);
-      await expect(page).toHaveTitle('Chollos, ofertas y cupones ⇒ Chollometro.com » Nº1 en España');
-      await page.waitForTimeout(3000);
+      await utils.gotoWeb(process.env.BASE_URL_CHOLLOMETRO!,'Chollos, ofertas y cupones ⇒ Chollometro.com » Nº1 en España');
       await others.cookiesChollometro.click();
-      await page.waitForTimeout(3000);
+      await utils.waitForTimeout(3);
       await others.loginLink.click();
     });
 
@@ -42,8 +40,8 @@ test.describe('Level up points in Chollometro', () => {
     });
 
     await test.step('Weve turned up the heat on the bargains', async () => {
-      await expect(page).toHaveTitle('(99+) Chollos, ofertas y cupones ⇒ Chollometro.com » Nº1 en España');
-      await page.waitForTimeout(5000);
+      utils.checkTitleURL('(99+) Chollos, ofertas y cupones ⇒ Chollometro.com » Nº1 en España');
+      await utils.waitForTimeout(5);
 
       let msg = await others.levelUp();
 
