@@ -7,6 +7,7 @@
     "test:demo": "npx playwright test ./tests/example.spec.ts --project=chromium --workers=1",
     "test:daily": "npx playwright test --project=chromium --workers=1 --grep @daily",
     "test:week": "npx playwright test --project=chromium --workers=1 --grep @week"
+    "test:privateTracker": "npx playwright test ./tests/privatetracker.spec.ts --project=chromium --workers=1"
   },
   "keywords": [],
   "author": "Carlos López",
