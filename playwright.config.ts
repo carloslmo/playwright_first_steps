@@ -19,13 +19,19 @@ export default defineConfig({
     //['json', { outputFile: 'test-results/test-results.json' }],
     //['list']
   ],  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  timeout: 60000, // full test timeout
+  expect: {
+    timeout: 60000, // expect/assertions timeout
+  },
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure'
+    screenshot: 'only-on-failure',
+    actionTimeout: 60000,    // Action timeout (click, fill, etc.)
+    navigationTimeout: 60000, // Navigation timeout (goto, waitForURL, etc.)
   },
 
   /* Configure projects for major browsers */
